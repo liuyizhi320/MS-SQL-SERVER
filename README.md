@@ -66,3 +66,13 @@ ORDER  BY d.NAME,
           A.id, 
           a.colorder 
 ```
+* 截取&左边的所有字符：<br>
+```sql
+SELECT LEFT(Cast(actions_name AS VARCHAR(255)), ( 
+              Charindex('&', Cast( 
+              actions_name AS VARCHAR(255))) - 1 )) 
+FROM   ceair_shopping.dbo.shopping_actions 
+WHERE  actions_name LIKE 'shopping.ceair.com/search?category3_id=%' 
+       AND actions_name NOT LIKE 'shopping.ceair.com/search?category3_id=&%' 
+       AND Charindex('&', Cast(actions_name AS VARCHAR(200))) > 0 
+```
