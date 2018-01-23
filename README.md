@@ -74,3 +74,19 @@ WHERE  actions_name LIKE 'shopping.ceair.com/search?category3_id=%'
        AND actions_name NOT LIKE 'shopping.ceair.com/search?category3_id=&%' 
        AND Charindex('&', Cast(actions_name AS VARCHAR(200))) > 0 
 ```
+
+*  显示数据库 & 表的size
+```sql
+EXEC sp_spaceused<br>
+ EXEC sp_spaceused 'table_name'
+ ```
+列名	数据类型	描述<br>
+database_name	varchar(18)	当前数据库的名称。<br>
+database_size	varchar(18)	当前数据库的大小。<br>
+unallocated space	varchar(18)	数据库的未分配空间。<br>
+
+列名	数据类型	描述<br>
+reserved	varchar(18)	保留的空间总量。<br>
+Data	varchar(18)	数据使用的空间总量。<br>
+index_size	varchar(18)	索引使用的空间。<br>
+Unused	varchar(18)	未用的空间量。<br>
