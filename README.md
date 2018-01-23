@@ -77,8 +77,8 @@ WHERE  actions_name LIKE 'shopping.ceair.com/search?category3_id=%'
 
 *  显示数据库 & 表的size
 ```sql
-EXEC sp_spaceused<br>
- EXEC sp_spaceused 'table_name'
+EXEC sp_spaceused
+EXEC sp_spaceused 'table_name'
  ```
 列名	数据类型	描述<br>
 database_name	varchar(18)	当前数据库的名称。<br>
