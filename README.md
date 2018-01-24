@@ -90,3 +90,68 @@ reserved	varchar(18)	保留的空间总量。<br>
 Data	varchar(18)	数据使用的空间总量。<br>
 index_size	varchar(18)	索引使用的空间。<br>
 Unused	varchar(18)	未用的空间量。<br>
+
+
+*  显示一个数据库所有表的size
+```sql
+
+CREATE TABLE #data 
+  ( 
+     NAME       VARCHAR(100), 
+     row        VARCHAR(100), 
+     reserved   VARCHAR(100), 
+     data       VARCHAR(100), 
+     index_size VARCHAR(100), 
+     unused     VARCHAR(100) 
+  ) 
+
+DECLARE @name VARCHAR(100) 
+DECLARE cur CURSOR FOR 
+  SELECT NAME 
+  FROM   sysobjects 
+  WHERE  xtype = 'u' 
+         AND NAME NOT LIKE 'MS%' 
+  ORDER  BY NAME 
+
+OPEN cur 
+
+FETCH next FROM cur INTO @name 
+
+WHILE @@fetch_status = 0 
+  BEGIN 
+      INSERT INTO #data 
+      EXEC Sp_spaceused 
+        @name 
+
+      PRINT @name 
+
+      FETCH next FROM cur INTO @name 
+  END 
+
+CLOSE cur 
+
+DEALLOCATE cur 
+
+CREATE TABLE #datanew 
+  ( 
+     NAME       VARCHAR(100), 
+     row        INT, 
+     reserved   INT, 
+     data       INT, 
+     index_size INT, 
+     unused     INT 
+  ) 
+
+INSERT INTO #datanew 
+SELECT NAME, 
+       CONVERT(INT, row)                           AS row, 
+       CONVERT(INT, Replace(reserved, 'KB', ''))   AS reserved, 
+       CONVERT(INT, Replace(data, 'KB', ''))       AS data, 
+       CONVERT(INT, Replace(index_size, 'KB', '')) AS index_size, 
+       CONVERT(INT, Replace(unused, 'KB', ''))     AS unused 
+FROM   #data 
+
+SELECT * 
+FROM   #datanew 
+ORDER  BY NAME 
+```
